@@ -39,8 +39,8 @@ module tb_fifo ();
 		#1 wr_rst = 1'b1;	
 		#2 rd_rst = 1'b1;
 
-		repeat (20)	@(posedge wr_clk) t.push_generate();
-		repeat (20)	@(posedge rd_clk) t.pop_generate();
+		repeat (20)	@(posedge wr_clk) fifo.push_generate();
+		repeat (20)	@(posedge rd_clk) fifo.pop_generate();
 
 	end
 

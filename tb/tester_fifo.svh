@@ -10,12 +10,11 @@ class tester_fifo #(parameter DEPTH = 15);
     //=== Interface instance ==============
     virtual fifo_if itf;
     
-    function new(virtual fifo_if.dvr t);
-        itf = t;
+    function new(virtual fifo_if.dvr fifo;
+        itf = fifo;
     endfunction
 
     //=== Generate signals ================
-    
     task push_generate();
 	 #0.1
         itf.push = push_e_t'($random());
@@ -36,18 +35,19 @@ class tester_fifo #(parameter DEPTH = 15);
     endtask
         
     //=== Golden Models ================
-    
     task golden_model();
     	#0.1
-    	if (Q.size >= 1) expected_push_pop();
+    	if (Q.size >= 1) 
+            expected_push_pop();
     	
     	if (Q.size() >= DEPTH) begin
-		overflow();
+		    overflow();
     	end
     	else if (Q.size() <= 1) begin
-    		if (Q.size() == 1) begin last_value = itf.data_out;
+    		if (Q.size() == 1) begin 
+                last_value = itf.data_out;
     		end
-               underflow();
+            underflow();
         end
     endtask
     
@@ -59,15 +59,15 @@ class tester_fifo #(parameter DEPTH = 15);
     
     task overflow();
     	#0.1
-	msg_code = (itf.full != 1) ? 3 : 4;
+	    msg_code = (itf.full != 1) ? 3 : 4;
     endtask
 	
     task underflow();
     	#0.1
     	if (Q.size() === 0) begin
             msg_code =  (itf.data_out !== last_value && itf.empty != 1)	? 5 :
-            		 (itf.data_out !== last_value)			? 6 : 
-                        (itf.empty != 1)					? 7 : 1;
+            	itf.data_out !== last_value) ? 6 : 
+                    (itf.empty != 1) ? 7 : 1;
         end
         message_handling(msg_code);
     endtask
