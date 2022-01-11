@@ -10,7 +10,7 @@ class tester_fifo #(parameter DEPTH = 15);
     //=== Interface instance ==============
     virtual fifo_if itf;
     
-    function new(virtual fifo_if.dvr fifo;
+    function new(virtual fifo_if.dvr fifo);
         itf = fifo;
     endfunction
 
@@ -66,7 +66,7 @@ class tester_fifo #(parameter DEPTH = 15);
     	#0.1
     	if (Q.size() === 0) begin
             msg_code =  (itf.data_out !== last_value && itf.empty != 1)	? 5 :
-            	itf.data_out !== last_value) ? 6 : 
+            	(itf.data_out !== last_value) ? 6 : 
                     (itf.empty != 1) ? 7 : 1;
         end
         message_handling(msg_code);
